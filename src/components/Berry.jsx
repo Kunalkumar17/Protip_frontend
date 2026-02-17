@@ -103,6 +103,7 @@ export default function TippingPage() {
       initPay(order);
     } else {
       alert("Failed to create order");
+      setLoading(false)
     }
 
   } catch (error) {
