@@ -61,6 +61,12 @@ export default function TippingPage() {
       finally {
         setLoading(false)
       }
+    },
+    modal: {
+      ondismiss: () => {
+        alert("Trasaction Cancelled! Try Again!")
+        setLoading(false);   // ✅ user closed popup
+      }
     }
   };
 
