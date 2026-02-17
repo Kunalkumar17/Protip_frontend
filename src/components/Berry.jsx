@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Heart, Sparkles, Send , Home } from 'lucide-react';
+import confetti from "canvas-confetti";
 
 export default function TippingPage() {
   const [amount, setAmount] = useState('100');
   const [message, setMessage] = useState('');
   const [name, setName] = useState("");
   const MIN_AMOUNT = 20;
+  const [loading, setLoading] = useState(false);
   const [currency, setCurrency] = useState("INR");
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const [recentTips, setRecentTips] = useState([
@@ -47,6 +49,7 @@ export default function TippingPage() {
 
         if (verifyRes.status === 201) {
           setShowSuccess(true);
+          fireConfetti();
           setTimeout(() => setShowSuccess(false), 3000);
         } else {
           alert("Payment verification failed");
@@ -54,6 +57,9 @@ export default function TippingPage() {
       } catch (err) {
         console.error(err);
         alert("Payment failed");
+      }
+      finally {
+        setLoading(false)
       }
     }
   };
@@ -63,28 +69,27 @@ export default function TippingPage() {
 };
 
   const handleSubmit = async () => {
-    if(currency === "INR")
-  if (!amount || Number(amount) < MIN_AMOUNT) {
-    alert(`Minimum tip amount is ₹${MIN_AMOUNT}`);
-    return;
-  }
+  if (currency === "INR")
+    if (!amount || Number(amount) < MIN_AMOUNT) {
+      alert(`Minimum tip amount is ₹${MIN_AMOUNT}`);
+      return;
+    }
 
   const finalName = name.trim() || "Anonymous";
 
   try {
-    const response = await fetch(
-      `${backendUrl}/donations/razorpay`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: finalName,
-          amount: Number(amount),
-          message,
-          currency
-        })
-      }
-    );
+    setLoading(true);   // ✅ START LOADER
+
+    const response = await fetch(`${backendUrl}/donations/razorpay`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: finalName,
+        amount: Number(amount),
+        message,
+        currency
+      })
+    });
 
     const order = await response.json();
 
@@ -97,7 +102,35 @@ export default function TippingPage() {
   } catch (error) {
     console.error(error);
     alert("Something went wrong");
+  } finally {   // ✅ STOP LOADER (always runs)
   }
+};
+
+const fireConfetti = () => {
+  const duration = 2500;
+  const end = Date.now() + duration;
+
+  const frame = () => {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 70,
+      origin: { x: 0 }
+    });
+
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 70,
+      origin: { x: 1 }
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  };
+
+  frame();
 };
 
 
@@ -120,6 +153,22 @@ export default function TippingPage() {
         <div className="berry blackberry absolute w-22 h-22 opacity-80" style={{ top: '80%', left: '50%' }}></div>
         <div className="berry blackberry absolute w-24 h-24 opacity-70" style={{ top: '40%', left: '5%' }}></div>
       </div>
+
+      {loading && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center
+                  bg-white/30 backdrop-blur-md">
+    
+    <div className="bg-white rounded-2xl shadow-xl px-8 py-6 flex flex-col items-center gap-4">
+      
+      <div className="w-10 h-10 border-4 border-pink-400 border-t-transparent rounded-full animate-spin"></div>
+      
+      <p className="font-semibold text-gray-700">
+        Processing your tip...
+      </p>
+
+    </div>
+  </div>
+)}
       
        <button
   onClick={() => window.location.href = "/"}
@@ -252,12 +301,27 @@ export default function TippingPage() {
             </div>
 
             <button
-              onClick={handleSubmit}
-              className="w-full bg-gradient-to-r from-pink-400 via-purple-400 to-rose-400 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-lg hover:scale-105 transition-all"
-            >
-              <Send className="w-5 h-5" />
-              Send Tip
-            </button>
+  onClick={handleSubmit}
+  disabled={loading}
+  className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all
+    ${loading
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-gradient-to-r from-pink-400 via-purple-400 to-rose-400 hover:shadow-lg hover:scale-105 text-white"
+    }
+  `}
+>
+  {loading ? (
+    <>
+      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      Processing...
+    </>
+  ) : (
+    <>
+      <Send className="w-5 h-5" />
+      Send Tip
+    </>
+  )}
+</button>
           </div>
 
           {showSuccess && (
