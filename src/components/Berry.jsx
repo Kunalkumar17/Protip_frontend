@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Heart, Sparkles, Send , Home } from 'lucide-react';
 import confetti from "canvas-confetti";
 
@@ -10,12 +10,33 @@ export default function TippingPage() {
   const [loading, setLoading] = useState(false);
   const [currency, setCurrency] = useState("INR");
   const backendUrl = import.meta.env.VITE_BACKEND_URL
-  const [recentTips, setRecentTips] = useState([
-    { name: 'Sarah', amount: 500, message: 'Love your stream! 💕', id: 1 },
-    { name: 'Alex', amount: 100, message: 'Keep up the great work!', id: 2 },
-    { name: 'Jamie', amount: 300, message: 'Sending cozy vibes ✨', id: 3 }
-  ]);
+  const [recentTips, setRecentTips] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const getTips = async() => {
+    try {
+      const response = await fetch(`${backendUrl}/donations/gettips` , {
+          method: "GET",
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      const data = await response.json();
+      console.log(data)
+      if(response.status === 200) {
+        const last3 = data
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 3);
+
+          setRecentTips(last3)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getTips();
+  }, []);
 
   const presetAmounts = currency === "INR"
   ? [100, 200, 500, 1000]
@@ -254,7 +275,7 @@ const fireConfetti = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tip Amount (₹)
+                Tip Amount ({currency})
               </label>
               <div className="grid grid-cols-4 gap-2 mb-3">
                 {presetAmounts.map((preset) => (
@@ -351,7 +372,7 @@ const fireConfetti = () => {
           <div className="space-y-4">
             {recentTips.map((tip, index) => (
               <div
-                key={tip.id}
+                key={tip._id}
                 className="bg-gradient-to-r from-pink-50 to-purple-50 p-4 rounded-2xl border border-pink-200 hover:shadow-md transition-all animate-fadeIn"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -366,7 +387,7 @@ const fireConfetti = () => {
                     </div>
                   </div>
                   <div className="bg-gradient-to-r from-pink-400 to-purple-400 text-white px-3 py-1 rounded-full font-bold text-sm">
-                    ₹{tip.amount}
+                    {tip.currency.toUpperCase()} {tip.amount}
                   </div>
                 </div>
                 {tip.message && (
