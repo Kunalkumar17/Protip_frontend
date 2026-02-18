@@ -112,7 +112,7 @@ const TipItem = ({ tip, highlight }) => (
     }`}
   >
     <div>
-      <p className="font-semibold text-white">{tip.user}</p>
+      <p className="font-semibold text-white">{tip.name}</p>
       <p className="text-gray-400 text-sm">{tip.message}</p>
     </div>
     <p className="font-bold text-green-400 text-lg">₹{tip.amount}</p>
