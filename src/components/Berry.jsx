@@ -21,7 +21,6 @@ export default function TippingPage() {
         }
       );
       const data = await response.json();
-      console.log(data)
       if(response.status === 200) {
         const last3 = data
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
