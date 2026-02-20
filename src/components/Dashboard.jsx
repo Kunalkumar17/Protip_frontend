@@ -113,15 +113,15 @@ const getTipStyle = (amount) => {
   if (amount >= 5000) {
     return {
       bg: "bg-red-500/20",
-      border: "border-orange-500",
+      border: "border-red-500",
       text: "text-orange-400"
     };
   }
 
   if (amount >= 1000) {
     return {
-      bg: "bg-pink-500/20",
-      border: "border-yellow-500",
+      bg: "bg-pink-500",
+      border: "border-pink-500",
       text: "text-yellow-400"
     };
   }
