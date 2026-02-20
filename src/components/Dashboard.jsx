@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useLiveTips from "./useLiveTips";
+import { useRef } from "react"; 
 
 const TipsDashboard = () => {
 
@@ -9,9 +10,13 @@ const TipsDashboard = () => {
   // NEW live tips (from websocket)
   const [newTips, setNewTips] = useState([]);
 
+  const tipSound = useRef(new Audio("/sounds/tip.mp3"));
+
   // listen for live tips
   useLiveTips((tip) => {
     setNewTips(prev => [tip, ...prev]);
+
+    tipSound.current.play();
   });
 
   // fetch last 10 tips from backend
@@ -103,21 +108,68 @@ const TipsDashboard = () => {
   );
 };
 
-const TipItem = ({ tip, highlight }) => (
-  <li
-    className={`p-6 flex justify-between items-center ${
-      highlight
-        ? "bg-green-500/10 border-l-4 border-green-400"
-        : "bg-gray-900"
-    }`}
-  >
-    <div>
-      <p className="font-semibold text-white">{tip.name}</p>
-      <p className="text-gray-400 text-sm">{tip.message}</p>
-    </div>
-    <p className="font-bold text-green-400 text-lg">₹{tip.amount}</p>
-  </li>
-);
+const getTipStyle = (amount) => {
+
+  if (amount >= 5000) {
+    return {
+      bg: "bg-red-500/20",
+      border: "border-orange-500",
+      text: "text-orange-400"
+    };
+  }
+
+  if (amount >= 1000) {
+    return {
+      bg: "bg-yellow-500/20",
+      border: "border-yellow-500",
+      text: "text-yellow-400"
+    };
+  }
+
+  if (amount >= 500) {
+    return {
+      bg: "bg-green-500/20",
+      border: "border-green-500",
+      text: "text-green-400"
+    };
+  }
+
+  if (amount >= 100) {
+    return {
+      bg: "bg-blue-500/20",
+      border: "border-blue-500",
+      text: "text-blue-400"
+    };
+  }
+
+  return {
+    bg: "bg-gray-800",
+    border: "border-gray-700",
+    text: "text-gray-300"
+  };
+};
+
+const TipItem = ({ tip, highlight }) => {
+
+  const style = getTipStyle(tip.amount);
+
+  return (
+    <li
+      className={`p-6 flex justify-between items-center border-l-4
+      ${style.bg} ${style.border}
+      ${highlight ? "animate-pulse" : ""}`}
+    >
+      <div>
+        <p className="font-semibold text-white">{tip.name}</p>
+        <p className="text-gray-400 text-sm">{tip.message}</p>
+      </div>
+
+      <p className={`font-bold text-xl ${style.text}`}>
+        ₹{tip.amount}
+      </p>
+    </li>
+  );
+};
 
 const Stat = ({ title, value }) => (
   <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow">

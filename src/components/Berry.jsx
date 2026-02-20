@@ -27,6 +27,7 @@ export default function TippingPage() {
           .slice(0, 3);
 
           setRecentTips(last3)
+          console.log(last3)
       }
     } catch (error) {
       console.log(error)
@@ -85,7 +86,7 @@ export default function TippingPage() {
     modal: {
       ondismiss: () => {
         alert("Trasaction Cancelled! Try Again!")
-        setLoading(false);   // ✅ user closed popup
+        setLoading(false);
       }
     }
   };
@@ -104,7 +105,7 @@ export default function TippingPage() {
   const finalName = name.trim() || "Anonymous";
 
   try {
-    setLoading(true);   // ✅ START LOADER
+    setLoading(true);
 
     const response = await fetch(`${backendUrl}/donations/razorpay`, {
       method: "POST",
@@ -129,7 +130,7 @@ export default function TippingPage() {
   } catch (error) {
     console.error(error);
     alert("Something went wrong");
-  } finally {   // ✅ STOP LOADER (always runs)
+  } finally {
   }
 };
 

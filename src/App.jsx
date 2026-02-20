@@ -62,16 +62,13 @@ function App() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-10 text-sm text-white/70">
-          <a href="#" className="hover:text-white transition">Features</a>
+          <a href="#features" className="hover:text-white transition">Features</a>
           <a href="#" className="hover:text-white transition">Pricing</a>
-          <a href="#" className="hover:text-white transition">Contact</a>
+          <a href="/contactus" className="hover:text-white transition">Contact</a>
         </div>
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="px-5 py-2 text-sm border border-white/10 rounded-md hover:bg-white/5 transition">
-            Login
-          </button>
           <button className="px-5 py-2 text-sm bg-white text-black rounded-md font-medium hover:shadow-lg hover:shadow-white/20 transition">
             Get Started
           </button>
@@ -138,15 +135,12 @@ function App() {
             <button className="px-12 py-5 bg-white text-black rounded-md hover:shadow-2xl hover:shadow-white/15 hover:-translate-y-0.5 transition-all duration-300 text-base font-medium tracking-tight">
               Get Started
             </button>
-            <button className="px-12 py-5 border border-white/15 rounded-md hover:bg-white/5 hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300 text-base font-medium tracking-tight">
-              View Demo
-            </button>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="border-t border-white/5 py-32">
+      <section id='features' className="border-t border-white/5 py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-16">
           <div className="text-center mb-24">
             <h2 className="text-4xl lg:text-5xl font-semibold tracking-tighter mb-5">
