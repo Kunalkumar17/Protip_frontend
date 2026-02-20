@@ -120,7 +120,7 @@ const getTipStyle = (amount) => {
 
   if (amount >= 1000) {
     return {
-      bg: "bg-yellow-500/20",
+      bg: "bg-pink-500/20",
       border: "border-yellow-500",
       text: "text-yellow-400"
     };
@@ -150,6 +150,17 @@ const getTipStyle = (amount) => {
 };
 
 const TipItem = ({ tip, highlight }) => {
+  const [isActive, setIsActive] = useState(highlight);
+
+  useEffect(() => {
+    if (!highlight) return;
+
+    const timer = setTimeout(() => {
+      setIsActive(false); // stop animation after 20 sec
+    }, 20000);
+
+    return () => clearTimeout(timer);
+  }, [highlight]);
 
   const style = getTipStyle(tip.amount);
 
@@ -157,7 +168,7 @@ const TipItem = ({ tip, highlight }) => {
     <li
       className={`p-6 flex justify-between items-center border-l-4
       ${style.bg} ${style.border}
-      ${highlight ? "animate-pulse" : ""}`}
+      ${isActive ? "animate-pulse" : ""}`}
     >
       <div>
         <p className="font-semibold text-white">{tip.name}</p>
