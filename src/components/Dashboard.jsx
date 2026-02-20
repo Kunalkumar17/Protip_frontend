@@ -59,6 +59,14 @@ const getTipStyle = (amount) => {
     };
   }
 
+  if(amount.currency != "INR"){
+    return {
+      bg: "bg-green-500/20",
+      border: "border-green-500",
+      text: "text-green-400"
+    };
+  }
+
   return {
     bg: "bg-gray-800",
     border: "border-gray-700",
