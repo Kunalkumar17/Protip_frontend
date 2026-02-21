@@ -255,7 +255,7 @@ const fireConfetti = () => {
               <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
                 Send a Berry
               </h1>
-              <p className="text-sm text-gray-500">Support the stream with love</p>
+              <p className="text-sm text-gray-500">Support the stream</p>
             </div>
           </div>
 
@@ -266,6 +266,7 @@ const fireConfetti = () => {
               </label>
               <input
                 type="text"
+                maxLength={40}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Anonymous"
@@ -321,17 +322,24 @@ const fireConfetti = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Message (Optional)
-              </label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Send a message..."
-                rows="3"
-                className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all resize-none"
-              />
-            </div>
+  <label className="block text-sm font-medium text-gray-700">
+    Message (Optional)
+  </label>
+
+  <textarea
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+    placeholder="Send a message..."
+    rows={3}
+    maxLength={150}
+    className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all resize-none"
+  />
+
+  <p className="text-sm text-gray-500 text-right mt-1">
+    {message.length}/150 characters
+  </p>
+</div>
+            
 
             <button
   onClick={handleSubmit}
