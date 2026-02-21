@@ -210,7 +210,7 @@ const TipItem = ({ tip, highlight }) => {
 
   return (
     <li
-      className={`p-6 flex justify-between items-center border-l-4
+      className={`p-6 flex justify-between items-center rounded-xl m-4 border-2
       ${style.bg} ${style.border}
       ${isActive ? "animate-pulse" : ""}`}
     >
