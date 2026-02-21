@@ -219,7 +219,7 @@ const TipItem = ({ tip, highlight }) => {
       </div>
 
       <div>
-        <p className="text-gray-400 text-sm">{tip.message}</p>
+        <p className="text-gray-400 text-lg">{tip.message}</p>
       </div>
       <p className={`font-bold text-xl ${style.text}`}>
         {formatMoney(tip.amount, tip.currency)}
