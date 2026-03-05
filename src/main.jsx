@@ -13,6 +13,7 @@ import PrivacyPolicy from './components/PrivacyPolicy.jsx'
 import ShippingDeliveryPolicy from './components/ShippingPolicy.jsx'
 import RefundPolicy from './components/RefundPolicy.jsx'
 import ContactUs from './components/ContactUs.jsx'
+import GoalOverlay from './components/GoalOverlay.jsx'
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
     path: '/ContactUs',
     element: <ContactUs/>,
   },
+  {
+    path: '/overlay/goal',
+    element: <GoalOverlay/>
+  }
 ])
 
 createRoot(document.getElementById('root')).render(
