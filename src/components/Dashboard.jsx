@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import useLiveTips from "./useLiveTips";
 
-
-/* ================================
-   HELPERS
-================================ */
-
 const formatMoney = (amount, currency = "INR") => {
   try {
     return new Intl.NumberFormat("en-US", {

@@ -6,7 +6,10 @@ const useLiveTips = (onNewTip) => {
 
     socket.onmessage = (event) => {
       const tip = JSON.parse(event.data);
+      console.log(tip)
+      if(tip.type === "tipAlert"){
       onNewTip(tip); // send single tip
+      }
     };
 
     return () => socket.close();
