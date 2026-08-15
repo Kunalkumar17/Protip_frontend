@@ -13,6 +13,59 @@ export default function TippingPage() {
   const [recentTips, setRecentTips] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
 
+
+  const [activeTab, setActiveTab] = useState("chat");
+const [selectedMemeSound, setSelectedMemeSound] = useState(null);
+
+const memeSounds = [
+  {
+    id: "emotionalsound",
+    name: "emotionalsound",
+    file: "/sounds/emotionalsound.mp3",
+  },
+  {
+    id: "faaah",
+    name: "faaah",
+    file: "/sounds/faaah.mp3",
+  },
+  {
+    id: "aayein",
+    name: "aayein",
+    file: "/sounds/aayein.mp3",
+  },
+  {
+    id: "snore",
+    name: "snore",
+    file: "/sounds/snore.mp3",
+  }
+];
+
+let currentMemeAudio = null;
+
+function playMemeSound(soundId) {
+  if (!soundId) return;
+
+  const soundPath = MEME_SOUNDS[soundId];
+
+  if (!soundPath) {
+    console.warn("Unknown meme sound:", soundId);
+    return;
+  }
+
+  // Stop any previous meme sound
+  if (currentMemeAudio) {
+    currentMemeAudio.pause();
+    currentMemeAudio.currentTime = 0;
+  }
+
+  currentMemeAudio = new Audio(soundPath);
+  currentMemeAudio.volume = 1;
+
+  currentMemeAudio.play().catch((error) => {
+    console.error("Could not play meme sound:", error);
+  });
+}
+
   const getTips = async() => {
     try {
       const response = await fetch(`${backendUrl}/donations/gettips` , {
@@ -104,6 +157,10 @@ export default function TippingPage() {
 
   const finalName = name.trim() || "Anonymous";
 
+  const selectedSound = memeSounds.find(
+  (sound) => sound.id === selectedMemeSound
+);
+
   try {
     setLoading(true);
 
@@ -111,11 +168,14 @@ export default function TippingPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: finalName,
-        amount: Number(amount),
-        message,
-        currency
-      })
+  name: finalName,
+  amount: Number(amount),
+  message: activeTab === "chat" ? message : "",
+  memeSound: activeTab === "sounds" && selectedSound
+    ? selectedSound.id
+    : null,
+  currency,
+})
     });
 
     const order = await response.json();
@@ -216,7 +276,7 @@ const fireConfetti = () => {
             className="relative h-32 w-full bg-cover bg-center"
             style={{
               backgroundImage:
-                "url('https://yt3.googleusercontent.com/8Dq8bW95xatklgGQDe1F6sJed3Y6y1gUT4-2OqBxTXamsh2whgaYJvQIWMIf8J9YX-mLDHHIxQ=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj')",
+                "url('/banner.jpg')",
             }}
           >
           {/* Overlay */}
@@ -225,7 +285,7 @@ const fireConfetti = () => {
             {/* Profile */}
             <div className="relative">
               <img
-                src="https://yt3.googleusercontent.com/AogwYle8h_TG9_wjkWoWXuSOGIzcQeE1POYjfi4RlAvN4MCxZklytv0tLZ4mGYHgSk31qINENw=s160-c-k-c0x00ffffff-no-rj"
+                src="/profile.jpg"
                 alt="Profile"
                 className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-xl"
               />
@@ -322,22 +382,118 @@ const fireConfetti = () => {
             </div>
 
             <div>
-  <label className="block text-sm font-medium text-gray-700">
-    Message (Optional)
-  </label>
+  {/* Tabs */}
+  <div className="flex bg-pink-50 p-1 rounded-xl mb-4">
+    <button
+      type="button"
+      onClick={() => setActiveTab("chat")}
+      className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${
+        activeTab === "chat"
+          ? "bg-white text-pink-600 shadow-sm"
+          : "text-gray-500 hover:text-pink-500"
+      }`}
+    >
+      💬 Chat
+    </button>
 
-  <textarea
-    value={message}
-    onChange={(e) => setMessage(e.target.value)}
-    placeholder="Send a message..."
-    rows={3}
-    maxLength={150}
-    className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all resize-none"
-  />
+    <button
+      type="button"
+      onClick={() => setActiveTab("sounds")}
+      className={`flex-1 py-2.5 rounded-lg font-medium transition-all ${
+        activeTab === "sounds"
+          ? "bg-white text-purple-600 shadow-sm"
+          : "text-gray-500 hover:text-purple-500"
+      }`}
+    >
+      🔊 Meme Sounds
+    </button>
+  </div>
 
-  <p className="text-sm text-gray-500 text-right mt-1">
-    {message.length}/150 characters
-  </p>
+  {/* Chat Tab */}
+  {activeTab === "chat" && (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Message (Optional)
+      </label>
+
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Send a message..."
+        rows={3}
+        maxLength={150}
+        className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all resize-none"
+      />
+
+      <p className="text-sm text-gray-500 text-right mt-1">
+        {message.length}/150 characters
+      </p>
+    </div>
+  )}
+
+  {/* Meme Sounds Tab */}
+  {activeTab === "sounds" && (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-3">
+      Choose a Meme Sound
+    </label>
+
+    {/* Scrollable meme sound area */}
+    <div className="max-h-52 overflow-y-auto pr-1">
+      <div className="grid grid-cols-2 gap-2">
+        {memeSounds.map((sound) => (
+          <button
+            key={sound.id}
+            type="button"
+            onClick={() => {
+                setSelectedMemeSound(sound.id);
+
+                const audio = new Audio(sound.file);
+                audio.volume = 0.5;
+                audio.play().catch(() => {});
+              }}
+            className={`p-2.5 rounded-xl border text-left transition-all ${
+              selectedMemeSound === sound.id
+                ? "border-purple-400 bg-purple-100 shadow-sm scale-[1.01]"
+                : "border-pink-200 bg-pink-50/50 hover:bg-purple-50 hover:border-purple-300"
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-lg shrink-0">🔊</span>
+
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-gray-800 truncate">
+                    {sound.name}
+                  </p>
+                  <p className="text-[10px] text-gray-500">
+                    Meme Sound
+                  </p>
+                </div>
+              </div>
+
+              {selectedMemeSound === sound.id && (
+                <span className="text-purple-600 text-xs font-bold shrink-0">
+                  ✓
+                </span>
+              )}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {selectedMemeSound && (
+      <button
+        type="button"
+        onClick={() => setSelectedMemeSound(null)}
+        className="mt-2 text-xs text-gray-500 hover:text-red-500 transition"
+      >
+        Remove selected sound
+      </button>
+    )}
+  </div>
+)}
 </div>
             
 

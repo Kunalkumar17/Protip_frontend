@@ -14,6 +14,7 @@ import ShippingDeliveryPolicy from './components/ShippingPolicy.jsx'
 import RefundPolicy from './components/RefundPolicy.jsx'
 import ContactUs from './components/ContactUs.jsx'
 import GoalOverlay from './components/GoalOverlay.jsx'
+import TopDonators from './components/TopDonators.jsx'
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: '/overlay/goal',
     element: <GoalOverlay/>
+  },
+  {
+    path: '/overlay/top-donators',
+    element: <TopDonators/>
   }
 ])
 

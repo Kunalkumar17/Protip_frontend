@@ -1,26 +1,35 @@
 import { useEffect, useState } from "react";
 
 export default function GoalOverlay() {
-
-  const GOAL = 10000;
-  const [total, setTotal] = useState(0);
+  const [goal, setGoal] = useState({
+    name: "Monthly Goal",
+    target: 10000,
+    total: 0,
+  });
 
   useEffect(() => {
     const ws = new WebSocket(
-      import.meta.env.VITE_BACKEND_URL.replace("http", "ws")
+      import.meta.env.VITE_BACKEND_URL.replace(/^http/, "ws")
     );
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
-      if (data.type === "goalInit") setTotal(data.total);
-      if (data.type === "goalUpdate") setTotal(data.total);
+      if (
+        data.type === "goalInit" ||
+        data.type === "goalUpdate"
+      ) {
+        setGoal(data.goal);
+      }
     };
 
     return () => ws.close();
   }, []);
 
-  const progress = Math.min((total / GOAL) * 100, 100);
+  const progress =
+    goal.target > 0
+      ? Math.min((goal.total / goal.target) * 100, 100)
+      : 0;
 
   return (
     <div
@@ -28,39 +37,40 @@ export default function GoalOverlay() {
         width: 520,
         fontFamily: "Inter, system-ui, sans-serif",
         color: "white",
-
-        /* transparent background */
-        background: "rgba(0,0,0,0.45)",
+        background: "black",
         padding: "14px 18px",
         borderRadius: 12,
-
-        backdropFilter: "blur(6px)"
+        backdropFilter: "blur(6px)",
       }}
     >
-
-      {/* header */}
+      {/* Header */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           fontSize: 18,
-          marginBottom: 6
+          marginBottom: 6,
         }}
       >
-        <span style={{ opacity: 0.9 }}>Monthly Goal</span>
+        {/* Dynamic goal name */}
+        <span style={{ opacity: 0.9 }}>
+          {goal.name}
+        </span>
+
+        {/* Dynamic goal amount */}
         <span style={{ opacity: 0.85 }}>
-          ₹{total} / ₹{GOAL}
+          ₹{goal.total.toFixed(2)} / ₹{goal.target.toFixed(2)}
         </span>
       </div>
 
-      {/* progress bar */}
+      {/* Progress bar */}
       <div
         style={{
           width: "100%",
           height: 8,
           background: "rgba(255,255,255,0.18)",
           borderRadius: 20,
-          overflow: "hidden"
+          overflow: "hidden",
         }}
       >
         <div
@@ -71,18 +81,22 @@ export default function GoalOverlay() {
               "linear-gradient(90deg,#ff4d6d,#c77dff,#ff4d6d)",
             backgroundSize: "200% 100%",
             animation: "gradientMove 3s linear infinite",
-            transition: "width 0.8s cubic-bezier(.22,1,.36,1)"
+            transition: "width 0.8s cubic-bezier(.22,1,.36,1)",
           }}
         />
       </div>
 
       <style>{`
         @keyframes gradientMove {
-          0% { background-position: 0% }
-          100% { background-position: 200% }
+          0% {
+            background-position: 0%;
+          }
+
+          100% {
+            background-position: 200%;
+          }
         }
       `}</style>
-
     </div>
   );
 }
