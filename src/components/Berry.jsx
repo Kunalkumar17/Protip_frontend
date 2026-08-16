@@ -260,7 +260,7 @@ const fireConfetti = () => {
       
        <button
   onClick={() => window.location.href = "/"}
-  className="absolute top-5 left-5 z-20 flex items-center gap-2
+  className="absolute top-5 left-5 z-20 max-sm:hidden flex items-center gap-2
              bg-white/80 backdrop-blur-md border border-pink-200
              px-4 py-2 rounded-xl shadow-lg hover:scale-105 transition hover:cursor-pointer"
 >
@@ -295,7 +295,7 @@ const fireConfetti = () => {
             {/* Channel Info */}
             <div className="ml-5 text-white drop-shadow-lg">
               <h2 className="text-xl font-bold leading-tight">Berry</h2>
-              <p className="text-xs opacity-90">@911berry • 21K subscribers</p>
+              <p className="text-xs opacity-90">@911_Berry • 21K subscribers</p>
             </div>
 
           </div>
