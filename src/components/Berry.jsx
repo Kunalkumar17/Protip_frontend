@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from "react";
 import { Heart, Sparkles, Send , Home } from 'lucide-react';
 import confetti from "canvas-confetti";
 
@@ -13,9 +13,16 @@ export default function TippingPage() {
   const [recentTips, setRecentTips] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const currentMemeAudio = useRef(null);
+
+  const MEME_SOUND_PRICE = 30;
+
 
   const [activeTab, setActiveTab] = useState("chat");
-const [selectedMemeSound, setSelectedMemeSound] = useState(null);
+  const [selectedMemeSound, setSelectedMemeSound] = useState(null);
+
+  const isMemeSoundSelected =
+  activeTab === "sounds" && selectedMemeSound !== null;
 
 const memeSounds = [
   {
@@ -40,31 +47,31 @@ const memeSounds = [
   }
 ];
 
-let currentMemeAudio = null;
 
-function playMemeSound(soundId) {
-  if (!soundId) return;
+const playMemeSound = (soundId) => {
+  const sound = memeSounds.find((item) => item.id === soundId);
 
-  const soundPath = MEME_SOUNDS[soundId];
-
-  if (!soundPath) {
-    console.warn("Unknown meme sound:", soundId);
+  if (!sound) {
+    console.warn("Sound not found:", soundId);
     return;
   }
 
-  // Stop any previous meme sound
-  if (currentMemeAudio) {
-    currentMemeAudio.pause();
-    currentMemeAudio.currentTime = 0;
+  // Stop the previous sound
+  if (currentMemeAudio.current) {
+    currentMemeAudio.current.pause();
+    currentMemeAudio.current.currentTime = 0;
   }
 
-  currentMemeAudio = new Audio(soundPath);
-  currentMemeAudio.volume = 1;
+  // Create the new sound
+  const audio = new Audio(sound.file);
+  audio.volume = 1;
 
-  currentMemeAudio.play().catch((error) => {
-    console.error("Could not play meme sound:", error);
+  currentMemeAudio.current = audio;
+
+  audio.play().catch((error) => {
+    console.error("Audio error:", error);
   });
-}
+};
 
   const getTips = async() => {
     try {
@@ -355,19 +362,26 @@ const fireConfetti = () => {
               </div>
               <div className='flex gap-2'>
                 <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="Custom amount"
-                min="20"
-                step="1"
-                className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all"
-              />
+  type="number"
+  value={amount}
+  onChange={(e) => setAmount(e.target.value)}
+  placeholder="Custom amount"
+  min="20"
+  step="1"
+  disabled={activeTab === "sounds" && !!selectedMemeSound}
+  className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all"
+/>
                 <select
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value)}
-                  className="w-[40%] px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all"
-                >
+  value={currency}
+  onChange={(e) => setCurrency(e.target.value)}
+  disabled={activeTab === "sounds" && !!selectedMemeSound}
+  className={`w-[40%] px-4 py-3 border rounded-xl
+    ${
+      activeTab === "sounds" && selectedMemeSound
+        ? "bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed"
+        : "bg-pink-50/50 border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+    }`}
+>
                   <option value="INR">INR</option>
                   <option value="USD">USD</option>
                   <option value="AUD">AUD</option>
@@ -446,12 +460,14 @@ const fireConfetti = () => {
             key={sound.id}
             type="button"
             onClick={() => {
-                setSelectedMemeSound(sound.id);
+  setSelectedMemeSound(sound.id);
 
-                const audio = new Audio(sound.file);
-                audio.volume = 0.5;
-                audio.play().catch(() => {});
-              }}
+  // Meme sounds always cost ₹30
+  setCurrency("INR");
+  setAmount(MEME_SOUND_PRICE.toString());
+
+  playMemeSound(sound.id);
+}}
             className={`p-2.5 rounded-xl border text-left transition-all ${
               selectedMemeSound === sound.id
                 ? "border-purple-400 bg-purple-100 shadow-sm scale-[1.01]"
@@ -486,7 +502,10 @@ const fireConfetti = () => {
     {selectedMemeSound && (
       <button
         type="button"
-        onClick={() => setSelectedMemeSound(null)}
+        onClick={() => {
+  setSelectedMemeSound(null);
+  setAmount("100");
+}}
         className="mt-2 text-xs text-gray-500 hover:text-red-500 transition"
       >
         Remove selected sound
