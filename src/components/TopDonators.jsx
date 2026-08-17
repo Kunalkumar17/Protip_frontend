@@ -184,13 +184,13 @@ export default function TopDonatorsOverlay() {
         }
 
         .ticker-item {
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
 
-  font-size: 16px;
-  padding-left: 20px;
-}
+          font-size: 16px;
+          padding-left: 20px;
+        }
 
         .rank {
           margin-right: 8px;
