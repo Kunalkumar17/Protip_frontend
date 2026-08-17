@@ -44,7 +44,57 @@ const memeSounds = [
     id: "snore",
     name: "snore",
     file: "/sounds/snore.mp3",
-  }
+  },
+  {
+    id: "kuchupuchu",
+    name: "Kuchu Puchu",
+    file: "/sounds/kuchupuchu.mp3",
+  },
+  {
+    id: "RazeUlt",
+    name: "Raze Ult",
+    file: "/sounds/RazeUlt.mp3",
+  },
+  {
+    id: "valorantteleporter",
+    name: "Valorant Teleporter",
+    file: "/sounds/valorantteleporter.mp3",
+  },
+  {
+    id: "weeeee",
+    name: "Weeeee",
+    file: "/sounds/weeeee.mp3",
+  },
+  {
+    id: "knock",
+    name: "Knock",
+    file: "/sounds/knock.mp3",
+  },
+  {
+    id: "gareeb",
+    name: "Gareeb",
+    file: "/sounds/gareeb.mp3",
+  },
+  {
+    id: "catlaugh",
+    name: "Cat Laugh",
+    file: "/sounds/catlaugh.mp3",
+  },
+  {
+    id: "vasteganahoeyin",
+    name: "Vastega Na Hoeyin",
+    file: "/sounds/vasteganahoeyin.mp3",
+  },
+  {
+    id: "ladkitumbhotboltiho",
+    name: "Ladki Tumbhot Bolti Ho",
+    file: "/sounds/ladkitumbhotboltiho.mp3",
+  },
+  {
+    id: "meowghopghop",
+    name: "Meow Ghop Ghop",
+    file: "/sounds/meowghopghop.mp3",
+  },
 ];
 
 
@@ -64,7 +114,7 @@ const playMemeSound = (soundId) => {
 
   // Create the new sound
   const audio = new Audio(sound.file);
-  audio.volume = 1;
+  audio.volume = 0.5;
 
   currentMemeAudio.current = audio;
 
