@@ -346,20 +346,26 @@ const fireConfetti = () => {
                 Tip Amount ({currency})
               </label>
               <div className="grid grid-cols-4 gap-2 mb-3">
-                {presetAmounts.map((preset) => (
-                  <button
-                    key={preset}
-                    onClick={() => setAmount(preset.toString())}
-                    className={`py-2 rounded-xl font-medium transition-all ${
-                      amount === preset.toString()
-                        ? 'bg-gradient-to-r from-pink-400 to-purple-400 text-white shadow-lg scale-105'
-                        : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
-                    }`}
-                  >
-                    {}{preset}
-                  </button>
-                ))}
-              </div>
+                  {presetAmounts.map((preset) => {
+                    const isDisabled = activeTab === "sounds" && !!selectedMemeSound;
+                    return (
+                      <button
+                        key={preset}
+                        onClick={() => setAmount(preset.toString())}
+                        disabled={isDisabled}
+                        className={`py-2 rounded-xl font-medium transition-all ${
+                          isDisabled
+                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                            : amount === preset.toString()
+                            ? "bg-gradient-to-r from-pink-400 to-purple-400 text-white shadow-lg scale-105"
+                            : "bg-pink-100 text-pink-700 hover:bg-pink-200"
+                        }`}
+                      >
+                        {preset}
+                      </button>
+                    );
+                  })}
+                </div>
               <div className='flex gap-2'>
                 <input
   type="number"

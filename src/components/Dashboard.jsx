@@ -287,6 +287,34 @@ const resetGoal = async () => {
     setGoalLoading(false);
   }
 };
+
+
+const replayTip = async (tipId) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/donations/replayTip`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ tipId }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to replay tip");
+    }
+
+    console.log("Tip replayed successfully");
+
+  } catch (error) {
+    console.error("Replay error:", error.message);
+  }
+};
   /* ================================
      STATS
   ================================= */
@@ -462,8 +490,13 @@ if (authenticated === false) {
           ) : (
             <ul className="divide-y divide-gray-800">
               {newTips.map(tip => (
-                <TipItem key={tip._id || tip.id} tip={tip} highlight />
-              ))}
+              <TipItem
+                key={tip._id || tip.id}
+                tip={tip}
+                highlight
+                onReplay={replayTip}
+              />
+            ))}
             </ul>
           )}
 
@@ -476,8 +509,12 @@ if (authenticated === false) {
           ) : (
             <ul className="divide-y divide-gray-800">
               {oldTips.map(tip => (
-                <TipItem key={tip._id || tip.id} tip={tip} />
-              ))}
+              <TipItem
+                key={tip._id || tip.id}
+                tip={tip}
+                onReplay={replayTip}
+              />
+            ))}
             </ul>
           )}
 
@@ -597,7 +634,7 @@ if (authenticated === false) {
    TIP ITEM
 ================================ */
 
-const TipItem = ({ tip, highlight }) => {
+const TipItem = ({ tip, highlight, onReplay }) => {
   const [isActive, setIsActive] = useState(highlight);
   const style = getTipStyle(tip.amount);
 
@@ -635,12 +672,26 @@ const TipItem = ({ tip, highlight }) => {
     )}
   </div>
 
-  {/* Amount - right */}
-  <div className="text-right">
-    <p className={`font-bold text-xl ${style.text}`}>
-      {formatMoney(tip.amount, tip.currency)}
-    </p>
-  </div>
+  {/* Amount / Replay - right */}
+<div className="flex items-center justify-end gap-3">
+  <button
+    onClick={() => onReplay(tip._id || tip.id)}
+    className="
+      px-3 py-2
+      bg-purple-500 hover:bg-purple-600
+      rounded-lg text-white
+      text-sm font-semibold
+      transition
+    "
+    title="Replay this tip on stream"
+  >
+    ↻ Replay
+  </button>
+
+  <p className={`font-bold text-xl ${style.text}`}>
+    {formatMoney(tip.amount, tip.currency)}
+  </p>
+</div>
 </li>
   );
 };
