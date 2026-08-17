@@ -151,7 +151,7 @@ export default function TopDonatorsOverlay() {
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
 
-          padding: 8px 0;
+          padding: 16px 0;
         }
 
         .ticker {
@@ -188,7 +188,7 @@ export default function TopDonatorsOverlay() {
           display: flex;
           align-items: center;
           white-space: nowrap;
-          font-size: 14px;
+          font-size: 20px;
           padding-left: 18px;
         }
 
