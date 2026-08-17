@@ -133,26 +133,25 @@ export default function TopDonatorsOverlay() {
         }
 
         .ticker-wrapper {
-          width: 650px;
-          max-width: 90vw;
+  width: 500px;
+  max-width: 90vw;
 
-          overflow: hidden;
+  overflow: hidden;
+  border-radius: 999px;
 
-          border-radius: 999px;
+  background: rgba(10, 10, 15, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.10);
 
-          background: rgba(10, 10, 15, 0.72);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(168, 85, 247, 0.10);
 
-          border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 
-          box-shadow:
-            0 8px 30px rgba(0, 0, 0, 0.35),
-            0 0 25px rgba(168, 85, 247, 0.10);
-
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-
-          padding: 16px 0;
-        }
+  /* Slightly thicker */
+  padding: 12px 0;
+}
 
         .ticker {
           width: 100%;
@@ -185,16 +184,17 @@ export default function TopDonatorsOverlay() {
         }
 
         .ticker-item {
-          display: flex;
-          align-items: center;
-          white-space: nowrap;
-          font-size: 20px;
-          padding-left: 18px;
-        }
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  font-size: 16px;
+  padding-left: 20px;
+}
 
         .rank {
-          margin-right: 7px;
-          font-size: 14px;
+          margin-right: 8px;
+          font-size: 17px;
         }
 
         .name {
@@ -228,23 +228,23 @@ export default function TopDonatorsOverlay() {
         }
 
         .empty-message {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
-          white-space: nowrap;
+  white-space: nowrap;
 
-          color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8);
 
-          font-size: 14px;
-          font-weight: 600;
+  font-size: 16px;
+  font-weight: 600;
 
-          padding: 2px 20px;
-        }
+  padding: 4px 20px;
+}
 
         .empty-icon {
-          font-size: 17px;
+          font-size: 20px;
         }
 
         .command {
