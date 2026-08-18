@@ -149,7 +149,6 @@ export default function RefundPolicy() {
                   href="mailto:Kunalkumar17aug@gmail.com"
                   className="font-semibold text-blue-400 hover:underline"
                 >
-                  Kunalkumar17aug@gmail.com
                 </a>
               </p>
             </div>

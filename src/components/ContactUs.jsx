@@ -24,7 +24,7 @@ export default function ContactUs() {
               href="mailto:kunalkumar17aug@gmail.com"
               className="text-blue-400 font-semibold hover:underline"
             >
-              Kunalkumar17aug@gmail.com
+              
             </a>
           </p>
 
