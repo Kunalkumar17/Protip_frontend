@@ -59,7 +59,7 @@ export default function GoalOverlay() {
 
         {/* Dynamic goal amount */}
         <span style={{ opacity: 0.85 }}>
-          ₹{goal.total.toFixed(2)} / ₹{goal.target.toFixed(2)}
+          <span style={{ fontSize: 28 }}>₹{goal.total.toFixed(2)} </span>/ ₹{goal.target.toFixed(2)}
         </span>
       </div>
 
