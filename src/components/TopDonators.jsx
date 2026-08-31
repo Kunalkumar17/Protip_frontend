@@ -29,7 +29,7 @@ export default function TopDonatorsOverlay() {
   useEffect(() => {
     fetchTopDonators();
 
-    const interval = setInterval(fetchTopDonators, 10000);
+    const interval = setInterval(fetchTopDonators, 600000);
 
     return () => clearInterval(interval);
   }, []);
