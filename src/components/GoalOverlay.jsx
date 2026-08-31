@@ -7,6 +7,38 @@ export default function GoalOverlay() {
     total: 0,
   });
 
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [messageVisible, setMessageVisible] = useState(true);
+
+  // Rotating messages
+  const messages = [
+    goal.name,
+    "!tip in chat to donate ❤️",
+  ];
+
+// Rotate messages with different durations
+useEffect(() => {
+  const duration = messageIndex === 0 ? 30000 : 10000;
+
+  const timeout = setTimeout(() => {
+    setMessageVisible(false);
+
+    // Change message after fade-out
+    setTimeout(() => {
+      setMessageIndex((prev) => (prev + 1) % messages.length);
+      setMessageVisible(true);
+    }, 400);
+  }, duration);
+
+  return () => clearTimeout(timeout);
+}, [messageIndex, goal.name]);
+
+
+  // Format amounts
+  const formatTotal = (amount) => { return `₹${amount.toLocaleString("en-IN")}`; };
+
+  const formatTarget = (amount) => { if (amount >= 1000000) { const value = amount / 1000000; return `₹${Number.isInteger(value) ? value : value.toFixed(1)}M`; } if (amount >= 100000) { const value = amount / 1000; return `₹${Number.isInteger(value) ? value : value.toFixed(1)}K`; } return `₹${amount.toLocaleString("en-IN")}`; };
+
   useEffect(() => {
     const ws = new WebSocket(
       import.meta.env.VITE_BACKEND_URL.replace(/^http/, "ws")
@@ -48,18 +80,50 @@ export default function GoalOverlay() {
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           fontSize: 18,
           marginBottom: 6,
         }}
       >
-        {/* Dynamic goal name */}
-        <span style={{ opacity: 0.9 }}>
-          {goal.name}
-        </span>
+        {/* Rotating message */}
+        <div
+          style={{
+            position: "relative",
+            height: 32,
+            display: "flex",
+            alignItems: "center",
+            overflow: "hidden",
+            maxWidth: 330,
+          }}
+        >
+          <span
+            style={{
+              opacity: messageVisible ? 0.9 : 0,
+              transform: messageVisible
+                ? "translateY(0)"
+                : "translateY(-8px)",
+              transition:
+                "opacity 0.4s ease, transform 0.4s ease",
+              fontSize: 25,
+              fontWeight: 600,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {messages[messageIndex]}
+          </span>
+        </div>
 
         {/* Dynamic goal amount */}
-        <span style={{ opacity: 0.85 }}>
-          <span style={{ fontSize: 28 }}>₹{goal.total.toFixed(2)} </span>/ ₹{goal.target.toFixed(2)}
+        <span
+          style={{
+            opacity: 0.85,
+            whiteSpace: "nowrap",
+          }}
+        >
+          <span style={{ fontSize: 28 }}>
+            {formatTotal(goal.total)}
+          </span>{" "}
+          / {formatTarget(goal.target)}
         </span>
       </div>
 
@@ -81,7 +145,8 @@ export default function GoalOverlay() {
               "linear-gradient(90deg,#ff4d6d,#c77dff,#ff4d6d)",
             backgroundSize: "200% 100%",
             animation: "gradientMove 3s linear infinite",
-            transition: "width 0.8s cubic-bezier(.22,1,.36,1)",
+            transition:
+              "width 0.8s cubic-bezier(.22,1,.36,1)",
           }}
         />
       </div>
