@@ -76,9 +76,9 @@ const memeSounds = [
     file: "/sounds/gareeb.mp3",
   },
   {
-    id: "catlaugh",
-    name: "Cat Laugh",
-    file: "/sounds/catlaugh.mp3",
+    id: "doglaugh",
+    name: "Dog Laugh",
+    file: "/sounds/doglaugh.mp3",
   },
   {
     id: "vasteganahoeyin",
