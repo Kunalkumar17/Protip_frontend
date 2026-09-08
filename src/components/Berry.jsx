@@ -5,7 +5,17 @@ import confetti from "canvas-confetti";
 export default function TippingPage() {
   const [amount, setAmount] = useState('100');
   const [message, setMessage] = useState('');
-  const [name, setName] = useState("");
+  const [name, setName] = useState(() => {
+  return localStorage.getItem("tipperName") || "";
+});
+
+useEffect(() => {
+  if (name.trim()) {
+    localStorage.setItem("tipperName", name);
+  }
+}, [name]);
+
+
   const MIN_AMOUNT = 20;
   const [loading, setLoading] = useState(false);
   const [currency, setCurrency] = useState("INR");
