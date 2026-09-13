@@ -105,6 +105,36 @@ const memeSounds = [
     name: "Meow Ghop Ghop",
     file: "/sounds/meowghopghop.mp3",
   },
+  {
+    id: "polsagyipols",
+    name: "Pol sagyi Pols",
+    file: "/sounds/polsagyipols.mp3",
+  },
+  {
+    id: "nanana",
+    name: "Na na na naaa",
+    file: "/sounds/nanana.mp3",
+  },
+  {
+    id: "aisahaikya",
+    name: "Aisa Hai kya",
+    file: "/sounds/aisahaikya.mp3",
+  },
+  {
+    id: "alelele",
+    name: "Alelele",
+    file: "/sounds/alelele.mp3",
+  },
+  {
+    id: "heyprabhu",
+    name: "Hey Prabhu",
+    file: "/sounds/heyprabhu.mp3",
+  },
+  {
+    id: "takleff",
+    name: "Takleff",
+    file: "/sounds/takleff.mp3",
+  },
 ];
 
 
