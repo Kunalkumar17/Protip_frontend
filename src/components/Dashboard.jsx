@@ -113,29 +113,36 @@ const TipsDashboard = () => {
     tipSound.current.play();
   });
 
-  // fetch old tips
-  const getTips = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/donations/gettips`
-      );
+const getTips = async () => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/donations/gettips`
+    );
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (res.status === 200) {
-        const last10 = data
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-          .slice(0, 10);
+    if (res.status === 200) {
+      const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
 
-        setOldTips(last10);
-      }
-    } catch (err) {
-      console.log(err);
+      const last24Hours = data
+        .filter((tip) => {
+          return new Date(tip.createdAt).getTime() >= twentyFourHoursAgo;
+        })
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+      setOldTips(last24Hours);
     }
-  };
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-  useEffect(() => {
+useEffect(() => {
   checkSession();
+  getTips();
 }, []);
 
 useEffect(() => {
@@ -501,7 +508,7 @@ if (authenticated === false) {
           )}
 
           <div className="p-6 border-y border-gray-800 font-semibold bg-gray-800/40 text-gray-300">
-            📜 Recent Tips (Last 10)
+            📜 Recent Tips (Last 24 Hours)
           </div>
 
           {oldTips.length === 0 ? (
