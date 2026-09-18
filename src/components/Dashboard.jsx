@@ -79,18 +79,14 @@ const TipsDashboard = () => {
 
   // listen for live tips
   useLiveTips((tip) => {
-    if (
-      streamer?.username &&
-      tip.channelName &&
-      String(tip.channelName).toLowerCase() !== streamer.username
-    ) {
-      return;
-    }
+  console.log("🔥 LIVE TIP RECEIVED:", tip);
 
-    setNewTips(prev => [tip, ...prev]);
-    tipSound.current.currentTime = 0;
-    tipSound.current.play();
-  }, streamer?.username);
+  setNewTips((prev) => [tip, ...prev]);
+
+  tipSound.current.currentTime = 0;
+
+  tipSound.current.play().catch(() => {});
+});
 
   // fetch old tips
   const getTips = async () => {
