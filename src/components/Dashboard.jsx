@@ -84,9 +84,8 @@ const TipsDashboard = () => {
   setNewTips((prev) => [tip, ...prev]);
 
   tipSound.current.currentTime = 0;
-
   tipSound.current.play().catch(() => {});
-});
+}, streamer?.username);
 
   // fetch old tips
   const getTips = async () => {

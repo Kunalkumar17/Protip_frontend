@@ -1,20 +1,29 @@
 import { useEffect } from "react";
 
-const useLiveTips = (onNewTip) => {
+const useLiveTips = (onNewTip, username) => {
   useEffect(() => {
-    const base = import.meta.env.VITE_WS_URL;
-
-    if (!base) {
-      console.error("❌ VITE_WS_URL is not configured");
+    if (!username) {
+      console.log("⏳ Waiting for streamer username...");
       return;
     }
 
-    console.log("🔌 Connecting to tips WebSocket...");
+    const base = import.meta.env.VITE_WS_URL;
 
-    const socket = new WebSocket(base);
+    if (!base) {
+      console.error("❌ VITE_WS_URL is not defined");
+      return;
+    }
+
+    const socketUrl =
+      `${base}${base.includes("?") ? "&" : "?"}` +
+      `streamer=${encodeURIComponent(username)}`;
+
+    console.log("🔌 Connecting:", socketUrl);
+
+    const socket = new WebSocket(socketUrl);
 
     socket.onopen = () => {
-      console.log("✅ Tips WebSocket connected");
+      console.log("✅ Live tips WebSocket connected");
     };
 
     socket.onmessage = (event) => {
@@ -27,23 +36,17 @@ const useLiveTips = (onNewTip) => {
           onNewTip(data);
         }
       } catch (error) {
-        console.error(
-          "❌ WebSocket message error:",
-          error
-        );
+        console.error("❌ WebSocket message error:", error);
       }
     };
 
     socket.onerror = (error) => {
-      console.error(
-        "❌ Tips WebSocket error:",
-        error
-      );
+      console.error("❌ WebSocket error:", error);
     };
 
     socket.onclose = (event) => {
       console.log(
-        "🔌 Tips WebSocket disconnected:",
+        "🔌 WebSocket disconnected:",
         event.code,
         event.reason
       );
@@ -52,7 +55,7 @@ const useLiveTips = (onNewTip) => {
     return () => {
       socket.close();
     };
-  }, [onNewTip]);
+  }, [username]);
 };
 
 export default useLiveTips;
