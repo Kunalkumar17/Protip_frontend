@@ -18,19 +18,12 @@ const useLiveTips = (onNewTip, username) => {
       `${base}${base.includes("?") ? "&" : "?"}` +
       `streamer=${encodeURIComponent(username)}`;
 
-    console.log("🔌 Connecting to:", socketUrl);
-
     const socket = new WebSocket(socketUrl);
-
-    socket.onopen = () => {
-      console.log("✅ WebSocket connected");
-    };
 
     socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
 
-        console.log("📩 WebSocket message:", data);
 
         if (data.type === "tipAlert") {
           onNewTip(data);
