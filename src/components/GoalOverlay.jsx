@@ -70,7 +70,11 @@ export default function GoalOverlay() {
     return `₹${amount.toLocaleString("en-IN")}`;
   };
 
+    // =========================================
+  // WEBSOCKET
   // =========================================
+
+    // =========================================
   // WEBSOCKET
   // =========================================
 
@@ -82,6 +86,29 @@ export default function GoalOverlay() {
       .replace(/^http:/, "ws:")
       .replace(/^https:/, "wss:");
 
+    // Get streamer slug from the URL
+    // Example:
+    // /berry/overlay/goal
+    //             ↑
+    //          streamer = berry
+    const streamerSlug =
+      window.location.pathname
+        .split("/")
+        .filter(Boolean)[0]
+        ?.toLowerCase();
+
+    if (!streamerSlug) {
+      console.error(
+        "Goal WebSocket: streamer slug is missing from URL"
+      );
+      return;
+    }
+
+    const STREAMER_WS_URL =
+      `${WS_URL}/?streamer=${encodeURIComponent(
+        streamerSlug
+      )}`;
+
     let ws = null;
     let reconnectTimer = null;
     let destroyed = false;
@@ -89,10 +116,13 @@ export default function GoalOverlay() {
     const connect = () => {
       if (destroyed) return;
 
-      console.log("Connecting to Goal WebSocket...");
+      console.log(
+        "Connecting to Goal WebSocket for streamer:",
+        streamerSlug
+      );
 
       try {
-        ws = new WebSocket(WS_URL);
+        ws = new WebSocket(STREAMER_WS_URL);
       } catch (error) {
         console.error(
           "Failed to create Goal WebSocket:",
@@ -105,7 +135,8 @@ export default function GoalOverlay() {
 
       ws.onopen = () => {
         console.log(
-          "Goal WebSocket connected"
+          "Goal WebSocket connected for streamer:",
+          streamerSlug
         );
       };
 

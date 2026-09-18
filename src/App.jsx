@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css'
 
 function App() {
@@ -69,9 +70,12 @@ function App() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="px-5 py-2 text-sm bg-white text-black rounded-md font-medium hover:shadow-lg hover:shadow-white/20 transition">
+          <Link to="/login" className="px-5 py-2 text-sm text-white/70 hover:text-white transition">
+            Login
+          </Link>
+          <Link to="/register" className="px-5 py-2 text-sm bg-white text-black rounded-md font-medium hover:shadow-lg hover:shadow-white/20 transition">
             Get Started
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -93,12 +97,12 @@ function App() {
           <a className="block text-white/80 hover:text-white">Contact</a>
 
           <div className="pt-4 flex flex-col gap-3">
-            <button className="py-2 border border-white/10 rounded-md">
+            <Link to="/login" className="py-2 border border-white/10 rounded-md text-center">
               Login
-            </button>
-            <button className="py-2 bg-white text-black rounded-md font-medium">
+            </Link>
+            <Link to="/register" className="py-2 bg-white text-black rounded-md font-medium text-center">
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
       )}
@@ -132,9 +136,9 @@ function App() {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
-            <button className="px-12 py-5 bg-white text-black rounded-md hover:shadow-2xl hover:shadow-white/15 hover:-translate-y-0.5 transition-all duration-300 text-base font-medium tracking-tight">
+            <Link to="/register" className="px-12 py-5 bg-white text-black rounded-md hover:shadow-2xl hover:shadow-white/15 hover:-translate-y-0.5 transition-all duration-300 text-base font-medium tracking-tight">
               Get Started
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -216,9 +220,9 @@ function App() {
           <p className="text-lg lg:text-xl text-white/60 max-w-2xl mx-auto mb-12 tracking-tight">
             Join thousands of creators who are monetizing their passion with the most sophisticated platform available.
           </p>
-          <button className="px-12 py-5 bg-white text-black rounded-md hover:shadow-2xl hover:shadow-white/15 hover:-translate-y-0.5 transition-all duration-300 text-base font-medium tracking-tight">
-            Contact Us
-          </button>
+          <Link to="/register" className="px-12 py-5 bg-white text-black rounded-md hover:shadow-2xl hover:shadow-white/15 hover:-translate-y-0.5 transition-all duration-300 text-base font-medium tracking-tight">
+            Get Started
+          </Link>
           <p className="mt-6 text-sm text-white/40 tracking-tight">
             No credit card required
           </p>

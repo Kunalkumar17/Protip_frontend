@@ -6,25 +6,38 @@ export default function TopDonatorsOverlay() {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const fetchTopDonators = async () => {
-    try {
-      const response = await fetch(
-        `${BACKEND_URL}/donations/topDonaters`,
-        {
-          cache: "no-store",
-        }
-      );
+  try {
+    const streamerSlug =
+      window.location.pathname
+        .split("/")
+        .filter(Boolean)[0]
+        ?.toLowerCase();
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch top donators");
-      }
-
-      const data = await response.json();
-
-      setDonators(data.slice(0, 5));
-    } catch (error) {
-      console.error("Top donators error:", error);
+    if (!streamerSlug) {
+      console.error("Streamer slug missing from URL");
+      return;
     }
-  };
+
+    const response = await fetch(
+      `${BACKEND_URL}/donations/topDonaters?channel=${encodeURIComponent(
+        streamerSlug
+      )}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch top donators");
+    }
+
+    const data = await response.json();
+
+    setDonators(data.slice(0, 5));
+  } catch (error) {
+    console.error("Top donators error:", error);
+  }
+};
 
   useEffect(() => {
     fetchTopDonators();

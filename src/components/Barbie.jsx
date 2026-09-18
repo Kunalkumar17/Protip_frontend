@@ -205,7 +205,7 @@ const playMemeSound = (soundId) => {
     key: import.meta.env.VITE_RAZOR_KEY_ID,
     amount: order.amount,
     currency: currency,
-    name: "Berry",
+    name: "Barbie",
     description: "Support the stream",
     order_id: order.id,
 
@@ -380,7 +380,7 @@ const fireConfetti = () => {
             className="relative h-32 w-full bg-cover bg-center"
             style={{
               backgroundImage:
-                "url('/banner/berry.jpg')",
+                "url('/banner/barbie.jpg')",
             }}
           >
           {/* Overlay */}
@@ -389,7 +389,7 @@ const fireConfetti = () => {
             {/* Profile */}
             <div className="relative">
               <img
-                src="/profile/berry.jpg"
+                src="/profile/barbie.jpg"
                 alt="Profile"
                 className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-xl"
               />
@@ -398,8 +398,8 @@ const fireConfetti = () => {
 
             {/* Channel Info */}
             <div className="ml-5 text-white drop-shadow-lg">
-              <h2 className="text-xl font-bold leading-tight">Berry</h2>
-              <p className="text-xs opacity-90">@911_Berry • 21K subscribers</p>
+              <h2 className="text-xl font-bold leading-tight">Barbie</h2>
+              <p className="text-xs opacity-90">@BarbieOwO • 10.4K subscribers</p>
             </div>
 
           </div>
@@ -417,7 +417,7 @@ const fireConfetti = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-                Send a Berry
+                Send a Tip
               </h1>
               <p className="text-sm text-gray-500">Support the stream</p>
             </div>

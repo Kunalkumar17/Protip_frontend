@@ -7,7 +7,10 @@ import { createBrowserRouter,
 import App from './App.jsx'
 import ErrorPage from './components/ErrorPage.jsx'
 import Berry from './components/Berry.jsx'
+import Barbie from './components/Barbie.jsx'
 import TipsDashboard from './components/Dashboard.jsx'
+import Login from './components/Login.jsx'
+import Register from './components/Register.jsx'
 import TermsAndConditions from './components/TermsAndConditions.jsx'
 import PrivacyPolicy from './components/PrivacyPolicy.jsx'
 import ShippingDeliveryPolicy from './components/ShippingPolicy.jsx'
@@ -15,6 +18,7 @@ import RefundPolicy from './components/RefundPolicy.jsx'
 import ContactUs from './components/ContactUs.jsx'
 import GoalOverlay from './components/GoalOverlay.jsx'
 import TopDonators from './components/TopDonators.jsx'
+import AlertOverlay from './components/AlertOverlay.jsx'
 
 const router = createBrowserRouter([
   {
@@ -27,7 +31,19 @@ const router = createBrowserRouter([
     element: <Berry />,
   },
   {
-    path: '/TipsDashBoard/911Berry',
+    path: '/BarbieOwO',
+    element: <Barbie />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+  },
+  {
+    path: '/dashboard',
     element: <TipsDashboard />,
   },
   {
@@ -51,12 +67,16 @@ const router = createBrowserRouter([
     element: <ContactUs/>,
   },
   {
-    path: '/overlay/goal',
+    path: '/:streamer/overlay/goal',
     element: <GoalOverlay/>
   },
   {
-    path: '/overlay/top-donators',
+    path: '/:streamer/overlay/top-donators',
     element: <TopDonators/>
+  },
+  {
+    path: '/:streamer/alert',
+    element: <AlertOverlay  />
   }
 ])
 

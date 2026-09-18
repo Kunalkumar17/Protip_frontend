@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 
-const useLiveTips = (onNewTip) => {
+const useLiveTips = (onNewTip, channelName) => {
   useEffect(() => {
-    const socket = new WebSocket(import.meta.env.VITE_WS_URL);
+    const base = import.meta.env.VITE_WS_URL;
+    const socketUrl = channelName
+      ? `${base}${base.includes("?") ? "&" : "?"}channel=${encodeURIComponent(channelName)}`
+      : base;
+
+    const socket = new WebSocket(socketUrl);
 
     socket.onmessage = (event) => {
       const tip = JSON.parse(event.data);
@@ -13,7 +18,7 @@ const useLiveTips = (onNewTip) => {
     };
 
     return () => socket.close();
-  }, []);
+  }, [channelName]);
 };
 
 export default useLiveTips;
