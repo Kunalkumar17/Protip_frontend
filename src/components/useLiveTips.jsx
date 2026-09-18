@@ -3,7 +3,7 @@ import { useEffect } from "react";
 const useLiveTips = (onNewTip, username) => {
   useEffect(() => {
     if (!username) {
-      console.log("⏳ Waiting for streamer username...");
+      console.log("⏳ Waiting for username...");
       return;
     }
 
@@ -18,12 +18,12 @@ const useLiveTips = (onNewTip, username) => {
       `${base}${base.includes("?") ? "&" : "?"}` +
       `streamer=${encodeURIComponent(username)}`;
 
-    console.log("🔌 Connecting:", socketUrl);
+    console.log("🔌 Connecting to:", socketUrl);
 
     const socket = new WebSocket(socketUrl);
 
     socket.onopen = () => {
-      console.log("✅ Live tips WebSocket connected");
+      console.log("✅ WebSocket connected");
     };
 
     socket.onmessage = (event) => {
@@ -46,7 +46,7 @@ const useLiveTips = (onNewTip, username) => {
 
     socket.onclose = (event) => {
       console.log(
-        "🔌 WebSocket disconnected:",
+        "🔌 WebSocket closed:",
         event.code,
         event.reason
       );
