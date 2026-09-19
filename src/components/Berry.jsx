@@ -202,7 +202,7 @@ const playMemeSound = (soundId) => {
 
   const initPay = (order) => {
   const options = {
-    key: import.meta.env.VITE_RAZOR_KEY_ID,
+    key: import.meta.env.VITE_BERRY_RAZOR_KEY_ID,
     amount: order.amount,
     currency: currency,
     name: "Berry",
