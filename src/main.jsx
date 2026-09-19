@@ -21,6 +21,7 @@ import TopDonators from './components/TopDonators.jsx'
 import AlertOverlay from './components/AlertOverlay.jsx'
 import VerifyEmail from './components/VerifyEmail.jsx'
 import { Analytics } from "@vercel/analytics/react";
+import Moli from './components/Moli.jsx'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/BarbieOwO',
     element: <Barbie />,
+  },
+  {
+    path: '/Molislays',
+    element: <Moli />
   },
   {
     path: '/login',
