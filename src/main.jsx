@@ -19,6 +19,7 @@ import ContactUs from './components/ContactUs.jsx'
 import GoalOverlay from './components/GoalOverlay.jsx'
 import TopDonators from './components/TopDonators.jsx'
 import AlertOverlay from './components/AlertOverlay.jsx'
+import VerifyEmail from './components/VerifyEmail.jsx'
 import { Analytics } from "@vercel/analytics/react";
 
 const router = createBrowserRouter([
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
   {
     path: '/:streamer/alert',
     element: <AlertOverlay  />
+  },
+  {
+    path:"/verify-email" ,
+    element: <VerifyEmail />
   }
 ])
 
