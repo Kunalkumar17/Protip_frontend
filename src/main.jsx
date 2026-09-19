@@ -19,6 +19,7 @@ import ContactUs from './components/ContactUs.jsx'
 import GoalOverlay from './components/GoalOverlay.jsx'
 import TopDonators from './components/TopDonators.jsx'
 import AlertOverlay from './components/AlertOverlay.jsx'
+import { Analytics } from "@vercel/analytics/react";
 
 const router = createBrowserRouter([
   {
@@ -83,5 +84,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <>
     <RouterProvider router={router} />
+    <Analytics />
   </>,
 )
