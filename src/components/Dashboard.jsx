@@ -32,9 +32,10 @@ const getTipStyle = (amount) => {
 };
 
 const NAV_ITEMS = [
-  { id: "live",    label: "Live tips", icon: "ti-flame"     },
-  { id: "monthly", label: "Monthly",   icon: "ti-chart-bar" },
-  { id: "overlays", label: "Overlays",  icon: "ti-layout"    },
+  { id: "live", label: "Live tips", icon: "ti-flame" },
+  { id: "monthly", label: "Monthly", icon: "ti-chart-bar" },
+  { id: "payments", label: "Payments", icon: "ti-wallet" },
+  { id: "overlays", label: "Overlays", icon: "ti-layout" },
 ];
 
 /* ================================
@@ -59,6 +60,14 @@ const TipsDashboard = () => {
 
   const [monthlyTips,    setMonthlyTips]    = useState([]);
   const [monthlyLoading, setMonthlyLoading] = useState(false);
+
+  const [paymentData, setPaymentData] = useState(null);
+const [paymentLoading, setPaymentLoading] = useState(false);
+
+const [upiId, setUpiId] = useState("");
+const [upiSaving, setUpiSaving] = useState(false);
+const [upiMessage, setUpiMessage] = useState("");
+
   const [selectedMonth,  setSelectedMonth]  = useState(() => {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
@@ -86,6 +95,98 @@ const TipsDashboard = () => {
   tipSound.current.currentTime = 0;
   tipSound.current.play().catch(() => {});
 }, streamer?.username);
+
+const getMonthlyPayout = async (mv) => {
+  try {
+    setPaymentLoading(true);
+
+    const [year, month] = mv.split("-");
+
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/auth/monthly-payout?year=${year}&month=${month}`,
+      {
+        credentials: "include",
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Failed to fetch payout"
+      );
+    }
+
+    setPaymentData(data);
+    setUpiId(data.upiId || "");
+  } catch (error) {
+    console.error("Payout error:", error);
+    setPaymentData(null);
+  } finally {
+    setPaymentLoading(false);
+  }
+};
+
+useEffect(() => {
+  if (
+    authenticated === true &&
+    activeView === "payments"
+  ) {
+    getMonthlyPayout(selectedMonth);
+  }
+}, [
+  authenticated,
+  activeView,
+  selectedMonth,
+]);
+
+const saveUpi = async () => {
+  try {
+    setUpiSaving(true);
+    setUpiMessage("");
+
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/auth/upi`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          upiId,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message || "Failed to save UPI ID"
+      );
+    }
+
+    setUpiId(data.upiId);
+
+    setUpiMessage(
+      "UPI ID saved successfully."
+    );
+
+    setPaymentData((prev) =>
+      prev
+        ? {
+            ...prev,
+            upiId: data.upiId,
+          }
+        : prev
+    );
+  } catch (error) {
+    setUpiMessage(error.message);
+  } finally {
+    setUpiSaving(false);
+  }
+};
 
   // fetch old tips
   const getTips = async () => {
@@ -380,7 +481,7 @@ const TipsDashboard = () => {
             {NAV_ITEMS.find((n) => n.id === activeView)?.label}
           </p>
 
-          {activeView === "monthly" && (
+          {(activeView === "monthly" || activeView === "payments") && (
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
@@ -502,6 +603,177 @@ const TipsDashboard = () => {
               </div>
             </>
           )}
+
+          {activeView === "payments" && (
+  <div className="max-w-3xl flex flex-col gap-6">
+
+    {/* PAYMENT SETTINGS */}
+
+    <div className="bg-[#161616] border border-white/[0.07] rounded-xl overflow-hidden">
+
+      <div className="px-5 py-4 border-b border-white/[0.07]">
+        <p className="text-[13px] font-medium text-white">
+          Payout details
+        </p>
+
+        <p className="text-[11px] text-gray-600 mt-1">
+          Add the UPI ID where you want to receive your payouts.
+        </p>
+      </div>
+
+      <div className="p-5">
+
+        <Field label="UPI ID">
+
+          <div className="flex gap-2">
+
+            <input
+              value={upiId}
+              onChange={(e) =>
+                setUpiId(e.target.value)
+              }
+              placeholder="example@upi"
+              className="flex-1 px-3.5 py-2.5 bg-[#111] border border-white/[0.07] rounded-lg text-[13px] text-white placeholder-gray-600 outline-none focus:border-white/20"
+            />
+
+            <button
+              onClick={saveUpi}
+              disabled={
+                upiSaving ||
+                !upiId.trim()
+              }
+              className="px-5 py-2.5 rounded-lg bg-white text-black text-[13px] font-medium hover:bg-gray-100 disabled:opacity-50"
+            >
+              {upiSaving
+                ? "Saving..."
+                : "Save"}
+            </button>
+
+          </div>
+
+        </Field>
+
+        {upiMessage && (
+          <p
+            className={`mt-3 text-[12px] ${
+              upiMessage
+                .toLowerCase()
+                .includes("success")
+                ? "text-green-400"
+                : "text-red-400"
+            }`}
+          >
+            {upiMessage}
+          </p>
+        )}
+
+      </div>
+    </div>
+
+
+    {/* MONTHLY PAYOUT */}
+
+    <div className="bg-[#161616] border border-white/[0.07] rounded-xl overflow-hidden">
+
+      <div className="px-5 py-4 border-b border-white/[0.07] flex items-center">
+
+        <div>
+          <p className="text-[13px] font-medium text-white">
+            Monthly payout
+          </p>
+
+          <p className="text-[11px] text-gray-600 mt-1">
+            Your payout after Razorpay and ProTip fees.
+          </p>
+        </div>
+
+      </div>
+
+
+      {paymentLoading ? (
+        <Empty>
+          Loading payout...
+        </Empty>
+      ) : !paymentData ? (
+        <Empty>
+          No payout information available.
+        </Empty>
+      ) : (
+
+        <div className="p-5 flex flex-col gap-3">
+
+          <PaymentRow
+            label="Total tips"
+            value={paymentData.totalTips}
+            plain
+          />
+
+          <PaymentRow
+            label="Gross amount"
+            value={formatMoney(
+              paymentData.grossAmount,
+              "INR"
+            )}
+          />
+
+          <PaymentRow
+            label={`Razorpay fee (${paymentData.rates?.razorpay ?? 2}%)`}
+            value={`- ${formatMoney(
+              paymentData.razorpayFee,
+              "INR"
+            )}`}
+            negative
+          />
+
+          <PaymentRow
+            label={`GST on Razorpay fee (${paymentData.rates?.razorpayGst ?? 18}%)`}
+            value={`- ${formatMoney(
+              paymentData.razorpayGst,
+              "INR"
+            )}`}
+            negative
+          />
+
+          <PaymentRow
+            label={`ProTip platform fee (${paymentData.rates?.platform ?? 5}%)`}
+            value={`- ${formatMoney(
+              paymentData.platformFee,
+              "INR"
+            )}`}
+            negative
+          />
+
+          <div className="border-t border-white/[0.07] my-2" />
+
+          <div className="flex items-center justify-between">
+
+            <div>
+              <p className="text-[12px] text-gray-500">
+                You receive
+              </p>
+
+              <p className="text-[11px] text-gray-700 mt-1">
+                Payout to {paymentData.upiId || "UPI not added"}
+              </p>
+            </div>
+
+            <p className="text-[24px] font-semibold text-green-400">
+              {formatMoney(
+                paymentData.netAmount,
+                "INR"
+              )}
+            </p>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+
+  </div>
+)}
 
           {/* ── OVERLAYS ── */}
           {activeView === "overlays" && (
@@ -774,5 +1046,32 @@ const OverlayCard = ({ title, description, icon, link }) => {
     </div>
   );
 };
+
+const PaymentRow = ({
+  label,
+  value,
+  negative,
+  plain,
+}) => (
+  <div className="flex items-center justify-between py-2">
+
+    <span className="text-[12px] text-gray-500">
+      {label}
+    </span>
+
+    <span
+      className={`text-[13px] font-medium ${
+        negative
+          ? "text-red-400"
+          : plain
+          ? "text-white"
+          : "text-gray-300"
+      }`}
+    >
+      {value}
+    </span>
+
+  </div>
+);
 
 export default TipsDashboard;

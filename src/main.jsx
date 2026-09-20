@@ -22,6 +22,9 @@ import AlertOverlay from './components/AlertOverlay.jsx'
 import VerifyEmail from './components/VerifyEmail.jsx'
 import { Analytics } from "@vercel/analytics/react";
 import Moli from './components/Moli.jsx'
+import AdminLogin from './pages/AdminLogin.jsx'
+import AdminDashboard from './pages/AdminDashboard.jsx'
+import ProtectedAdminRoute from './pages/ProtectedAdminRoute.jsx'
 
 const router = createBrowserRouter([
   {
@@ -88,7 +91,19 @@ const router = createBrowserRouter([
   {
     path:"/verify-email" ,
     element: <VerifyEmail />
-  }
+  },
+  {
+  path: '/admin/login',
+  element: <AdminLogin />,
+},
+{
+  path: '/admin',
+  element: (
+    <ProtectedAdminRoute>
+      <AdminDashboard />
+    </ProtectedAdminRoute>
+  ),
+},
 ])
 
 createRoot(document.getElementById('root')).render(
