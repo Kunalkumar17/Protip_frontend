@@ -208,37 +208,43 @@ const playMemeSound = (soundId) => {
     name: "Berry",
     description: "Support the stream",
     order_id: order.id,
-
-    handler: async (response) => {
-      try {
-        const verifyRes = await fetch(
-          `${backendUrl}/berry-donations/verifyRazorpay`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature
-            })
-          }
-        );
-
-        if (verifyRes.status === 201) {
-          setShowSuccess(true);
-          fireConfetti();
-          setTimeout(() => setShowSuccess(false), 3000);
-        } else {
-          alert("Payment verification failed");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Payment failed");
+    
+handler: async (response) => {
+  try {
+    const verifyRes = await fetch(
+      `${backendUrl}/berry-donations/verifyRazorpay`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature,
+        }),
       }
-      finally {
-        setLoading(false)
-      }
-    },
+    );
+
+    const data = await verifyRes.json();
+
+    if (verifyRes.ok && data.success) {
+      setShowSuccess(true);
+      fireConfetti();
+
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 3000);
+    } else {
+      console.error("Verification failed:", data);
+      alert(data.message || "Payment verification failed");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Payment failed");
+  } finally {
+    setLoading(false);
+  }
+},
+
     modal: {
       ondismiss: () => {
         alert("Trasaction Cancelled! Try Again!")
