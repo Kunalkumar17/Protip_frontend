@@ -70,11 +70,11 @@ function App() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <Link to="/login" className="px-5 py-2 text-sm text-white/70 hover:text-white transition">
-            Login
+          <Link to="/register" className="px-5 py-2 text-sm text-white/70 hover:text-white transition">
+            Sign Up
           </Link>
-          <Link to="/register" className="px-5 py-2 text-sm bg-white text-black rounded-md font-medium hover:shadow-lg hover:shadow-white/20 transition">
-            Get Started
+          <Link to="/dashboard" className="px-5 py-2 text-sm bg-white text-black rounded-md font-medium hover:shadow-lg hover:shadow-white/20 transition">
+            Dashboard
           </Link>
         </div>
 
@@ -97,11 +97,11 @@ function App() {
           <a className="block text-white/80 hover:text-white">Contact</a>
 
           <div className="pt-4 flex flex-col gap-3">
-            <Link to="/login" className="py-2 border border-white/10 rounded-md text-center">
-              Login
-            </Link>
-            <Link to="/register" className="py-2 bg-white text-black rounded-md font-medium text-center">
+            <Link to="/register" className="py-2 border border-white/10 rounded-md text-center">
               Get Started
+            </Link>
+            <Link to="/login" className="py-2 bg-white text-black rounded-md font-medium text-center">
+              Login
             </Link>
           </div>
         </div>
