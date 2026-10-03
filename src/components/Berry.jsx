@@ -139,6 +139,26 @@ const memeSounds = [
     name: "Takleff",
     file: "/sounds/takleff.mp3",
   },
+  {
+    id: "eheh",
+    name: "Eheh",
+    file: "/sounds/eheh.mp3",
+  },
+  {
+    id: "gayecho",
+    name: "Gay Echo",
+    file: "/sounds/gayecho.mp3",
+  },
+  {
+    id: "mommyhorror",
+    name: "Mommy Horror",
+    file: "/sounds/mommyhorror.mp3",
+  },
+  {
+    id: "seeyou",
+    name: "I See You Horror",
+    file: "/sounds/seeyou.mp3",
+  },
 ];
 
 

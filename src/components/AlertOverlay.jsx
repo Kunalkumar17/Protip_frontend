@@ -23,6 +23,10 @@ const MEME_SOUNDS = {
   heyprabhu: "/sounds/heyprabhu.mp3",
   polsagyipols: "/sounds/polsagyipols.mp3",
   takleff: "/sounds/takleff.mp3",
+  eheh: "/sounds/eheh.mp3",
+  gayecho: "/sounds/gayecho.mp3",
+  mommyhorror: "/sounds/mommyhorror.mp3",
+  seeyou: "/sounds/seeyou.mp3",
 };
 
 const EMOJI_EN_HI = {
