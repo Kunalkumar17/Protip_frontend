@@ -29,9 +29,6 @@ useEffect(() => {
 
   const currentMemeAudio = useRef(null);
 
-  const MEME_SOUND_PRICE = 30;
-
-
   const [activeTab, setActiveTab] = useState("chat");
   const [selectedMemeSound, setSelectedMemeSound] = useState(null);
 
@@ -470,16 +467,12 @@ const fireConfetti = () => {
               </label>
               <div className="grid grid-cols-4 gap-2 mb-3">
                   {presetAmounts.map((preset) => {
-                    const isDisabled = activeTab === "sounds" && !!selectedMemeSound;
                     return (
                       <button
                         key={preset}
                         onClick={() => setAmount(preset.toString())}
-                        disabled={isDisabled}
                         className={`py-2 rounded-xl font-medium transition-all ${
-                          isDisabled
-                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                            : amount === preset.toString()
+                          amount === preset.toString()
                             ? "bg-gradient-to-r from-pink-400 to-purple-400 text-white shadow-lg scale-105"
                             : "bg-pink-100 text-pink-700 hover:bg-pink-200"
                         }`}
@@ -497,13 +490,11 @@ const fireConfetti = () => {
   placeholder="Custom amount"
   min="20"
   step="1"
-  disabled={activeTab === "sounds" && !!selectedMemeSound}
   className="w-full px-4 py-3 bg-pink-50/50 border border-pink-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all"
 />
                 <select
   value={currency}
   onChange={(e) => setCurrency(e.target.value)}
-  disabled={activeTab === "sounds" && !!selectedMemeSound}
   className={`w-[40%] px-4 py-3 border rounded-xl
     ${
       activeTab === "sounds" && selectedMemeSound
@@ -590,10 +581,6 @@ const fireConfetti = () => {
             type="button"
             onClick={() => {
   setSelectedMemeSound(sound.id);
-
-  // Meme sounds always cost ₹30
-  setCurrency("INR");
-  setAmount(MEME_SOUND_PRICE.toString());
 
   playMemeSound(sound.id);
 }}
